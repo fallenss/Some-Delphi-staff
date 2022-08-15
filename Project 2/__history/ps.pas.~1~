@@ -43,7 +43,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TakeData(); //взятие эксель таблицы со списком отпусков
+procedure TakeData();
 begin
 
            // создание OLE-объекта Excel
@@ -74,7 +74,7 @@ begin
 
     for j := 1 to y do
     begin
-      case j of                   // занесение инфы из 1 строки таблицы в переменные
+      case j of
          1: user:= MyMass[i,j];
          2: date1:= MyMass[i,j];
          3: date2:= MyMass[i,j];
@@ -84,7 +84,7 @@ begin
     if (user='') or (date1=0) or (date2=0) then continue;
    if i>1 then
      begin
-       for i1 := 1 to i-1 do      // проверка есть ли этот работник уже в списке и заблокирован ли он
+       for i1 := 1 to i-1 do
          begin
           if (user=MyMass[i1,1]) and (CurrentDate>=MyMass[i1,2]) and (CurrentDate<=MyMass[i1,3]) then
            begin
@@ -94,7 +94,7 @@ begin
          end;
           if fek=true then continue;
      end;
-            // создание PS командлета для блокироки/разблокировки УЗ
+
     if (CurrentDate>=date1) and (CurrentDate<=date2) then  command:=command+'Disable-ADAccount '+user
     else command:=command+'Enable-ADAccount '+user;
 
@@ -121,7 +121,7 @@ procedure WriteLog();
     CloseFile(f);
 end;
 
-procedure TForm2.Button1Click(Sender: TObject);        //исполнение PS командлета
+procedure TForm2.Button1Click(Sender: TObject);        //PS
 begin
     ShellExecute(handle,'open', 'powershell.exe',pchar('Import-Module ActiveDirectory'+ #10#13+command) ,nil, Sw_ShowNormal);
 end;
@@ -164,7 +164,7 @@ begin
 close;
 end;
 
-procedure TForm2.Timer1Timer(Sender: TObject);  //таймер автоматом закрывающий окно, чтобы исполнялось в фоне
+procedure TForm2.Timer1Timer(Sender: TObject);
 begin
 if live=true then Timer1.Interval:=9000000
 else close;
